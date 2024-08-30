@@ -17,3 +17,31 @@ The main language that i will use is Python with the library Streamlit/ A princi
   <img src="https://raw.githubusercontent.com/devicons/devicon/6910f0503efdd315c8f9b858234310c06e04d9c0/icons/streamlit/streamlit-original.svg" title="Streamlit" alt="Streamlit" width="40" height="40"/>&nbsp;
 
 </div>
+
+
+#### Requirement
++ pip install
+	- streamlit
+	- pandas
+	- matplotlib
+	- seaborn
+	- spacy
+		python -m spacy download en
+	- textblob
+	- neattext
+	- wordcloud
+
++ File Processing
+	- docx2txt
+	- pyPDF2
+	- pdfplumber
+
+### Refactoring and Restructuring
++ radon: static code analysis
+	-mi
+	-cc
+	- hal metric
++ black:format
++ vulture:unsused import
++ mypy
++ pycodestyle
