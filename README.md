@@ -9,6 +9,7 @@ The purpose of this project is to develop the ability to create and use Artifici
 O processamento de linguagem natural (NLP) é uma área da ciência da computação e inteligência artificial preocupada com a interação entre computadores e humanos em linguagem natural. O objetivo final da NLP é ajudar os computadores a entender a linguagem tão bem quanto nós.
 O intuito desse projeto é desenvolver a capacidade de criar e utilizar modelos de Inteligência Artificial para diversas aplicações.
 
+<img src="https://github.com/davi-dokasi/NLP_summarizer/blob/main/img/nlp_app_workflow_jcharistech.png" alt="Workflow Streamlit">
 
 The main language that i will use is Python with the library Streamlit/ A principal linguagem do projeto sera Python com a biblioteca Streamlit
 
