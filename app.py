@@ -16,7 +16,8 @@ import nltk
 nltk.download('punkt_tab')
 from nltk import word_tokenize,sent_tokenize
 
-
+# Validação Summarização
+from rouge import Rouge
 
 # Exploratory Data Analysis PKG's
 import pandas as pd
@@ -50,6 +51,13 @@ def sumy_summarizer(docx, num=2):
     return result
 
 
+
+def valida_summary(summary, reference):
+    r = Rouge()
+    eval_score = r.get_scores(summary, reference)
+    eval_score_df = pd.DataFrame(eval_score[0])
+    return eval_score_df
+
 def main(): 
     """ Summarization simples com Streamlit """
     
@@ -70,12 +78,62 @@ def main():
             with c1:
                 with st.expander("LexRank Summary"):
                    meu_resumo = sumy_summarizer(texto_puro)
+                   document_len = {'Original':len(texto_puro), 
+                                   'Summary':len(meu_resumo)}
+                   st.write(document_len)
                    st.write(meu_resumo)
-            
+                   
+                   # Rouge (Recall-Oriented Understudy for Gisting Evaluation)
+                   # Rouge Score é uma métrica de avaliação de sumarização
+                   # O score é calculado comparando o resumo gerado com o resumo de referência
+                   # Rouge-n -> Rouge-1 mede a similaridade (sobreposição) entre palavras unigramas
+                   # Rouge-2 mede a similaridade entre bigramas
+                   # Rouge-L mede a similaridade entre sequências de palavras
+                   
+                   st.info("Rouge Score")
+                   score = valida_summary(meu_resumo, texto_puro)
+                   
+                   # explicação de (r, p, f)
+                   # r (recall) -> proporção de palavras no resumo de referência que estão no resumo gerado (em resumo quando do conteúdo relevante foi capturado pelo resumo gerado)
+                   # p (precision) -> proporção de palavras no resumo gerado que estão no resumo de referência (em resumo, quanto do conteúdo gerado é realmente relevante)
+                   # f (F-score) -> média harmônica entre r e p. Útil para quando se quer uma métrica única consideranto tanto precisão quanto recall
+                   
+                   
+                   # Interpretação (r =0.5, p = 0.6, f = 0.55)
+                   # Rouge-n(1 é unigrama, 2 é bigrama) 
+                   # r = 50% dos unigramos nos resumos de referência estão presentes no resumo gerado
+                   # p = 60% dos unigramos no resumo gerado estão no de referência
+                   # f = 55% média harmônica entre r e p
+                   
+                   # Rouge-l
+                   # 50% da sequência mais longa de palavras no resumo de referência estão presentes no resumo gerado
+                   # 60% da sequência mais longa de palavras no resumo gerado estão no resumo de referência
+                   # f = 55% média harmônica entre r e p
+                   
+                   st.dataframe(score.T)
+                   score['metrics'] = score.index
+                   fig = px.bar(score, x='metrics', 
+                                y='rouge-1', title='Rouge-1 Score')
+                   st.plotly_chart(fig)
+                   
             with c2:
                 with st.expander("TextRank Summary"):
                     meu_resumo = summarize(texto_puro)
+                    document_len = {'Original':len(texto_puro), 
+                                    'Summary':len(meu_resumo)}
+                    st.write(document_len)
                     st.write(meu_resumo)
+                    
+                    st.info("Rouge Score")
+                    score = valida_summary(meu_resumo, texto_puro)
+                    st.dataframe(score.T)
+                    
+                    score['metrics'] = score.index
+                    fig = px.bar(score, x='metrics', 
+                                y='rouge-1', title='Rouge-1 Score')
+                    st.plotly_chart(fig)
+    
+    
     else:
         st.subheader("Sobre")
 
